@@ -1,75 +1,89 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+#include<iostream>
+#include<cstring>
+#include<stdlib.h>
+#include<ctype.h>
+#include<fstream>
+using namespace std;
 
-#define MAX 100
+string arr[] = { "void", "using", "namespace", "int", "include", "iostream", "std", "main",
+"cin", "cout", "return", "float", "double", "string" };
 
-// List of C keywords
-char *keywords[] = {
-    "auto","break","case","char","const","continue","default","do","double",
-    "else","enum","extern","float","for","goto","if","int","long",
-    "register","return","short","signed","sizeof","static","struct",
-    "switch","typedef","union","unsigned","void","volatile","while"
-};
-
-int isKeyword(char buffer[]) {
-    int i;
-    for(i = 0; i < 32; ++i) {
-        if(strcmp(keywords[i], buffer) == 0)
-            return 1;
+bool
+isKeyword (string a)
+{
+  for (int i = 0; i < 14; i++)
+    {
+      if (arr[i] == a)
+	{
+	  return true;
+	}
     }
-    return 0;
+  return false;
 }
 
-int main() {
-    char ch, buffer[MAX];
-    FILE *fp;
-    int i = 0;
+int main() 
+{ 
 
-    fp = fopen("input.c", "r");
+	string s; 
 
-    if(fp == NULL) {
-        printf("Error while opening the file.\n");
-        return 0;
-    }
+	cout << "Enter the input: \n";
+	cout << "\n";
 
-    while((ch = fgetc(fp)) != EOF) {
+	while (cin >> s)
+	{
+        if (s == "+" || s == "-" || s == "" || s == "/" || s == "^" || s == "&&" || s == "||" || s == "=" || s == "==" || s == "&" || s == "|" || s == "%" || s == "++" || s == "--" || s == "+=" || s == "-=" || s == "/=" || s == "=" || s == "%=")
+	    {
+	      cout << s << " is an operator\n";
+	      s = "";
+	    }
+	  else if (isKeyword (s))
+	    {
+	      cout << s << " is a keyword\n";
+	      s = "";
+	    }
+	  else if (s == "(" || s == "{" || s == "[" || s == ")" || s == "}" || s == "]" || s == "<" || s == ">" || s == "()" || s == ";" || s == "<<" || s == ">>" || s == "," || s == "#")
+	    {
+	      cout << s << " is a symbol\n";
+	      s = "";
 
-        // Detect Operators
-        if(ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
-           ch == '=' || ch == '<' || ch == '>' ) {
-            printf("%c is an Operator\n", ch);
-        }
+	    }
+	  else if (s == "\n" || s == " " || s == "")
+	    {
+	      s = "";
 
-        // Detect Special Symbols
-        else if(ch == '(' || ch == ')' || ch == '{' || ch == '}' ||
-                ch == '[' || ch == ']' || ch == ',' || ch == ';') {
-            printf("%c is a Special Symbol\n", ch);
-        }
+	    }
+	  else if (isdigit (s[0]))
+	    {
+	      int x = 0;
+	      if (!isdigit (s[x++]))
+		{
+		  continue;
+		}
+	      else
+		{
+		  cout << s << " is a constant\n";
+		  s = "";
+		}
+	    }
+	  else
+	    {
+	      cout << s << " is an identifier\n";
+	      s = "";
+	    } 
+	} 
 
-        // Detect Numbers
-        else if(isdigit(ch)) {
-            printf("%c is a Number\n", ch);
-        }
+	return 0; 
+} 
 
-        // Detect Identifiers and Keywords
-        else if(isalpha(ch)) {
-            buffer[i++] = ch;
+// Input for the code
 
-            while((ch = fgetc(fp)) != EOF && (isalnum(ch))) {
-                buffer[i++] = ch;
-            }
+// #include <stdio.h>
 
-            buffer[i] = '\0';
-            i = 0;
+// void main ( )
 
-            if(isKeyword(buffer))
-                printf("%s is a Keyword\n", buffer);
-            else
-                printf("%s is an Identifier\n", buffer);
-        }
-    }
-
-    fclose(fp);
-    return 0;
-}
+// {
+//     int x = 6 ;
+//     int y = 4 ;
+//     x = x + y ;
+//     printf("%d", x);
+// }
